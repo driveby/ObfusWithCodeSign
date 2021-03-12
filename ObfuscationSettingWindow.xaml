@@ -17,29 +17,40 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="인증서 경로"/>
-            <Button Command="{Binding OpenCertificateFileCommand}" Width="200" Grid.Column="1" HorizontalAlignment="Left"
-                    ToolTip="{Binding CertificateFilePath}">
+            <TextBlock Text="SignTool.exe" VerticalAlignment="Center"/>
+            <Button Command="{Binding OpenSignToolPathCommand}" Width="200" Grid.Column="1" HorizontalAlignment="Left"
+                    ToolTip="{Binding SignToolPath}">
                 <Button.Template>
                     <ControlTemplate>
-                        <TextBox Text="{Binding CertificateFilePath}" Focusable="False" IsReadOnly="True" Width="200" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <TextBox Text="{Binding SignToolPath}" Focusable="False" IsReadOnly="True" Width="200" VerticalContentAlignment="Center"/>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <TextBlock Text="인증서 PW" Grid.Row="2"/>
-            <PasswordBox local:PasswordHelper.Attach="true" local:PasswordHelper.Password="{Binding CertificatePassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="200" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
+            <TextBlock Text="인증서 경로" Grid.Row="2"/>
+            <Button Command="{Binding OpenCertificateFileCommand}" Width="200" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"
+                    ToolTip="{Binding CertificateFilePath}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <TextBox Text="{Binding CertificateFilePath}" Focusable="False" IsReadOnly="True" Width="200" VerticalContentAlignment="Center"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <TextBlock Text="인증서 PW" Grid.Row="4"/>
+            <PasswordBox local:PasswordHelper.Attach="true" local:PasswordHelper.Password="{Binding CertificatePassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="200" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left"/>
             <Button Content="Save" Command="{Binding SaveCommand}" Grid.Column="2" Width="60" HorizontalAlignment="Right"/>
         </Grid>
         <Button Content="규칙 추가" Command="{Binding AddRuleCommand}" Width="60" HorizontalAlignment="Left" Grid.Row="2"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
-            <TextBlock Text="등록된 규칙 수 : "/>
-            <TextBlock Text="{Binding RuleList.Count}"/>
+            <TextBlock Text="등록된 규칙 수 : " VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding RuleList.Count}" VerticalAlignment="Center"/>
         </StackPanel>
         <ListView x:Name="lv" ItemsSource="{Binding RuleList}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="0" Padding="0"
                   Grid.Row="4" Margin="0,5,0,0">

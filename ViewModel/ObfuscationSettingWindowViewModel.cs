@@ -24,9 +24,10 @@ namespace ObfusWithSignTool
             if (false == File.Exists(RuleFilePath))
             {
                 XElement xmlRoot = new XElement("Rules");
+                XAttribute signtoolPath = new XAttribute("SignToolPath", "");
                 XAttribute certificatePath = new XAttribute("CertPath", "");
                 XAttribute certPassword = new XAttribute("CertPW", "");
-                xmlRoot.Add(certificatePath, certPassword);
+                xmlRoot.Add(signtoolPath, certificatePath, certPassword);
                 document = new XDocument(xmlRoot);
                 document.Save(RuleFilePath);
             }
@@ -39,11 +40,29 @@ namespace ObfusWithSignTool
             {
                 if (true == document.Root.HasAttributes)
                 {
+                    var signtoolAttribute = document.Root.Attributes("SignToolPath").FirstOrDefault();
+                    if (signtoolAttribute != null) this.SignToolPath = signtoolAttribute.Value;
+                    else
+                    {
+                        signtoolAttribute = new XAttribute("SignToolPath", "");
+                        if (document.Root != null) document.Root.Add(signtoolAttribute);
+                    }
+
                     var pathAttribute = document.Root.Attributes("CertPath").FirstOrDefault();
                     if (pathAttribute != null) this.CertificateFilePath = pathAttribute.Value;
+                    else
+                    {
+                        pathAttribute = new XAttribute("CertPath", "");
+                        if (document.Root != null) document.Root.Add(pathAttribute);
+                    }
 
                     var pwAttribute = document.Root.Attributes("CertPW").FirstOrDefault();
                     if (pwAttribute != null) this.CertificatePassword = pwAttribute.Value;
+                    else
+                    {
+                        pwAttribute = new XAttribute("CertPW", "");
+                        if (document.Root != null) document.Root.Add(pwAttribute);
+                    }
                 }
 
                 if (true == document.Root.HasElements)
@@ -70,6 +89,14 @@ namespace ObfusWithSignTool
 
         public ObfuscationSettingWindow WindowInstance { get; set; }
 
+        private string signToolPath;
+
+        public string SignToolPath
+        {
+            get { return signToolPath; }
+            set { signToolPath = value; OnPropertyChanged("SignToolPath"); }
+        }
+
         private string certificateFilePath;
 
         public string CertificateFilePath
@@ -92,6 +119,32 @@ namespace ObfusWithSignTool
         {
             get { return ruleList; }
             set { ruleList = value; OnPropertyChanged("RuleList"); }
+        }
+
+        private DelegateCommand openSignToolPathCommand;
+
+        public DelegateCommand OpenSignToolPathCommand
+        {
+            get
+            {
+                if (openSignToolPathCommand == null)
+                    openSignToolPathCommand = new DelegateCommand(ExecuteOpenSignToolPath);
+                return openSignToolPathCommand; 
+            }
+        }
+
+        private void ExecuteOpenSignToolPath()
+        {
+            var openDialog = new OpenFileDialog();
+            openDialog.Filter = "SignTool.exe (*.exe)| *.exe";
+
+            if (false == openDialog.ShowDialog())
+                return;
+
+            if (false == File.Exists(openDialog.FileName))
+                return;
+
+            this.SignToolPath = openDialog.FileName;
         }
 
         private DelegateCommand openCertificateFileCommand;
@@ -234,15 +287,25 @@ namespace ObfusWithSignTool
                 return;
             }
 
+            if(signToolPath.IsNullOrEmpty())
+            {
+                MessageBox.Show("SignTool.exe 경로가 설정되지 않았습니다.");
+                return;
+            }
+
             if (false == document.Root.HasAttributes)
             {
+                XAttribute signtoolPath = new XAttribute("SignToolPath", this.signToolPath.IsNullOrEmpty() ? "" : signToolPath);
                 XAttribute certificatePath = new XAttribute("CertPath", this.certificateFilePath);
                 XAttribute certPassword = new XAttribute("CertPW", this.certificatePassword.IsNullOrEmpty() ? "" : certificatePassword);
 
-                document.Root.Add(certificatePath, certPassword);
+                document.Root.Add(signtoolPath, certificatePath, certPassword);
             }
             else
             {
+                var signtoolAttribute = document.Root.Attributes("SignToolPath").FirstOrDefault();
+                if (signtoolAttribute != null) signtoolAttribute.Value = signToolPath;
+
                 var pathAttribute = document.Root.Attributes("CertPath").FirstOrDefault();
                 if (pathAttribute != null) pathAttribute.Value = certificateFilePath;
 

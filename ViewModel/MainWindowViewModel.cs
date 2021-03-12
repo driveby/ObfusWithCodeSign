@@ -19,7 +19,6 @@ namespace ObfusWithSignTool
 
         private readonly string RuleFilePath = System.IO.Directory.GetCurrentDirectory() + "\\Rule.xml";
         private readonly string BabelPath = @"C:\Program Files\Babel\babel.exe";
-        private readonly string SignToolPath = @"C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe";
         private readonly string CodeSignTargetPath = @"C:\CodeSign";
         private readonly string XConfigPath = @"D:\SplitBranch\Server\OneClick.Server\XConfig";
         private readonly string XHibernatePath = @"D:\SplitBranch\Server\OneClick.Server\XHibernate";
@@ -107,6 +106,12 @@ namespace ObfusWithSignTool
 
         private void ExecuteObfuscation()
         {
+            if(false == System.IO.File.Exists(BabelPath))
+            {
+                MessageBox.Show("난독화 프로그램을 찾을 수 없습니다.");
+                return;
+            }
+
             if (fileList == null || fileList.Count == 0) return;
 
             if (rootFolder.IsNullOrEmpty()) return;
@@ -214,6 +219,19 @@ namespace ObfusWithSignTool
             if (fileList == null || fileList.Count == 0) return;
             if (document == null || document.Root == null || false == document.Root.HasAttributes) return;
 
+            var signtoolAttribute = document.Root.Attributes("SignToolPath").FirstOrDefault();
+            if(signtoolAttribute == null || signtoolAttribute.Value.IsNullOrEmpty())
+            {
+                MessageBox.Show("SignTool.exe 경로가 설정되지 않았습니다.");
+                return;
+            }
+
+            if(false == System.IO.File.Exists(signtoolAttribute.Value))
+            {
+                MessageBox.Show("SignTool.exe 경로에 실행파일이 존재하지 않습니다.");
+                return;
+            }
+            
             var certAttribute = document.Root.Attributes("CertPath").FirstOrDefault();
             if (certAttribute == null || certAttribute.Value.IsNullOrEmpty())
             {
@@ -236,7 +254,7 @@ namespace ObfusWithSignTool
                 {
                     if (true == File.Exists(signPath))
                     {
-                        var psi = new ProcessStartInfo(SignToolPath)
+                        var psi = new ProcessStartInfo(signtoolAttribute.Value)
                             {
                                 Arguments = string.Format(@"sign /v /f ""{1}"" /p {2} /fd sha256 /td sha256 /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp ""{0}""",
                                 signPath,
