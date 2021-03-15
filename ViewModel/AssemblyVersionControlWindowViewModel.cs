@@ -84,7 +84,7 @@ namespace ObfusWithSignTool
             {
                 if (refreshCommand == null)
                     refreshCommand = new DelegateCommand(ExecuteRefresh);
-                return refreshCommand; 
+                return refreshCommand;
             }
         }
 
@@ -92,7 +92,7 @@ namespace ObfusWithSignTool
         {
             if (assemblyList != null)
             {
-                this.AssemblyList.Clear(); 
+                this.AssemblyList.Clear();
             }
 
             RefreshAssemblyList();
@@ -117,7 +117,7 @@ namespace ObfusWithSignTool
             if (batchVersion.IsNullOrEmpty()) return;
             if (assemblyList == null || assemblyList.Count == 0) return;
 
-            foreach(var assembly in assemblyList)
+            foreach (var assembly in assemblyList)
             {
                 if (true == assembly.IsExcepted || assembly.AssemblyVersion == "1.0.0.0") continue;
                 if (assembly.NewVersion == batchVersion) continue;
@@ -167,7 +167,7 @@ namespace ObfusWithSignTool
         private void ExecuteItemVersionSave(AssemblyInfoModel param)
         {
             if (param == null) return;
-            if(param.NewVersionPart1.IsNullOrEmpty() || param.NewVersionPart2.IsNullOrEmpty() || param.NewVersionPart3.IsNullOrEmpty() || param.NewVersionPart4.IsNullOrEmpty())
+            if (param.NewVersionPart1.IsNullOrEmpty() || param.NewVersionPart2.IsNullOrEmpty() || param.NewVersionPart3.IsNullOrEmpty() || param.NewVersionPart4.IsNullOrEmpty())
             {
                 MessageBox.Show("버전 정보가 올바르지 않습니다.");
                 return;
@@ -210,7 +210,7 @@ namespace ObfusWithSignTool
             {
                 if (exceptItemCommand == null)
                     exceptItemCommand = new DelegateCommand<AssemblyInfoModel>(ExecuteExceptItem);
-                return exceptItemCommand; 
+                return exceptItemCommand;
             }
         }
 
@@ -239,14 +239,14 @@ namespace ObfusWithSignTool
 
                 if (0 == type)
                 {
-                    item.AssemblyName = oldValue;
+                    //item.AssemblyName = oldValue;
                 }
                 else if (1 == type)
                 {
                     item.AssemblyVersion = oldValue;
                     item.NewVersion = oldValue;
                 }
-                else if(2 == type)
+                else if (2 == type)
                 {
                     item.FileVersion = oldValue;
                     item.NewVersion = oldValue;
@@ -301,13 +301,13 @@ namespace ObfusWithSignTool
                 foreach (var file in files)
                 {
                     var assemInfo = new AssemblyInfoModel();
-                    assemInfo.AssemblyName = Path.GetFileName(file.FullName);
+                    assemInfo.AssemblyName = Path.GetFileNameWithoutExtension(file.FullName);
                     var directory = Directory.GetParent(file.FullName);
                     assemInfo.ProjectFolderPath = directory.FullName;
 
-                    if (0 == list.Count(c=>c.ProjectFolderPath == assemInfo.ProjectFolderPath))
+                    if (0 == list.Count(c => c.ProjectFolderPath == assemInfo.ProjectFolderPath))
                     {
-                        list.Add(assemInfo); 
+                        list.Add(assemInfo);
                     }
                 }
 
