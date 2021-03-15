@@ -305,7 +305,10 @@ namespace ObfusWithSignTool
                     var directory = Directory.GetParent(file.FullName);
                     assemInfo.ProjectFolderPath = directory.FullName;
 
-                    list.Add(assemInfo);
+                    if (0 == list.Count(c=>c.ProjectFolderPath == assemInfo.ProjectFolderPath))
+                    {
+                        list.Add(assemInfo); 
+                    }
                 }
 
                 if (list.Count != 0)
