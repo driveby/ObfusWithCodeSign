@@ -139,7 +139,14 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding AssemblyName}" FontWeight="Bold"/>
                             <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                <TextBox Text="{Binding NewVersion}" Width="70"/>
+                                <!--<local:FocusedTextBox Text="{Binding NewVersion}" Width="70"/>-->
+                                <local:FocusedTextBox Text="{Binding NewVersionPart1}" Width="25"/>
+                                <TextBlock Text="."/>
+                                <local:FocusedTextBox Text="{Binding NewVersionPart2}" Width="25"/>
+                                <TextBlock Text="."/>
+                                <local:FocusedTextBox Text="{Binding NewVersionPart3}" Width="25"/>
+                                <TextBlock Text="."/>
+                                <local:FocusedTextBox Text="{Binding NewVersionPart4}" Width="25"/>
                                 <Button Content="Save" Command="{Binding Path=DataContext.ItemVersionSaveCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}"
                                         Width="50" Margin="5,0,0,0"/>
                             </StackPanel>

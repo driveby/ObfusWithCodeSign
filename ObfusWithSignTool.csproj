@@ -65,6 +65,7 @@
     <Compile Include="AssemblyVersionControlWindow.xaml.cs">
       <DependentUpon>AssemblyVersionControlWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\FocusedTextBox.cs" />
     <Compile Include="Helper\IsNullOrEmptyConverter.cs" />
     <Compile Include="Model\AssemblyInfoModel.cs" />
     <Compile Include="ViewModel\AssemblyVersionControlWindowViewModel.cs" />

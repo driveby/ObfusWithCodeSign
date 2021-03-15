@@ -51,7 +51,54 @@ namespace ObfusWithSignTool
         public string NewVersion
         {
             get { return newVersion; }
-            set { newVersion = value; OnPropertyChanged("NewVersion"); }
+            set 
+            { 
+                newVersion = value; OnPropertyChanged("NewVersion"); 
+
+                if(value.IsNotNullOrEmpty() && value.Contains("."))
+                {
+                    var splited = value.Split(new char[] { '.' });
+                    if(splited != null && splited.Count() == 4)
+                    {
+                        NewVersionPart1 = splited[0];
+                        NewVersionPart2 = splited[1];
+                        NewVersionPart3 = splited[2];
+                        NewVersionPart4 = splited[3];
+                    }
+                }
+            }
+        }
+
+        private string newVersionPart1;
+
+        public string NewVersionPart1
+        {
+            get { return newVersionPart1; }
+            set { newVersionPart1 = value; OnPropertyChanged("NewVersionPart1"); }
+        }
+
+        private string newVersionPart2;
+
+        public string NewVersionPart2
+        {
+            get { return newVersionPart2; }
+            set { newVersionPart2 = value; OnPropertyChanged("NewVersionPart2"); }
+        }
+
+        private string newVersionPart3;
+
+        public string NewVersionPart3
+        {
+            get { return newVersionPart3; }
+            set { newVersionPart3 = value; OnPropertyChanged("NewVersionPart3"); }
+        }
+
+        private string newVersionPart4;
+
+        public string NewVersionPart4
+        {
+            get { return newVersionPart4; }
+            set { newVersionPart4 = value; OnPropertyChanged("NewVersionPart4"); }
         }
 
         private bool isExcepted;

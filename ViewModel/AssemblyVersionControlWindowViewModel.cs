@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ObfusWithSignTool
 {
@@ -166,6 +167,14 @@ namespace ObfusWithSignTool
         private void ExecuteItemVersionSave(AssemblyInfoModel param)
         {
             if (param == null) return;
+            if(param.NewVersionPart1.IsNullOrEmpty() || param.NewVersionPart2.IsNullOrEmpty() || param.NewVersionPart3.IsNullOrEmpty() || param.NewVersionPart4.IsNullOrEmpty())
+            {
+                MessageBox.Show("버전 정보가 올바르지 않습니다.");
+                return;
+            }
+
+            param.NewVersion = string.Format("{0}.{1}.{2}.{3}", param.NewVersionPart1, param.NewVersionPart2, param.NewVersionPart3, param.NewVersionPart4);
+
             if (param.AssemblyVersion == param.NewVersion) return;
 
             string filePath = Path.Combine(param.ProjectFolderPath, @"Properties\AssemblyInfo.cs");
