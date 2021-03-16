@@ -54,6 +54,14 @@ namespace ObfusWithSignTool
             this.document = null;
         }
 
+        private bool isWindowMaximized;
+
+        public bool IsWindowMaximized
+        {
+            get { return isWindowMaximized; }
+            set { isWindowMaximized = value; OnPropertyChanged("IsWindowMaximized"); }
+        }
+
         private string rootFolder;
 
         public string RootFolder

@@ -97,6 +97,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Style\ButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -141,6 +145,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\btn_refresh_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\window-close.png" />
+    <Resource Include="Resources\window-full.png" />
+    <Resource Include="Resources\window-minimize.png" />
+    <Resource Include="Resources\window-zoom.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

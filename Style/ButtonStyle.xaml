@@ -1,0 +1,179 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--기본 베이스 버튼 스타일-->
+    <Style x:Key="OneClickCommonBaseButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontFamily" Value="Malgun Gothic"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="BorderBrush" Value="#c2c8cc"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Color="#fcfeff" Offset="0" />
+                    <GradientStop Color="#e6e8eb" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border" CornerRadius="2" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                          RecognizesAccessKey="True"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--기본 버튼 스타일-->
+    <Style x:Key="OneClickCommonButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource OneClickCommonBaseButtonStyle}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Height" Value="27"/>
+        <Setter Property="Padding" Value="7,0"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Border Background="Transparent" CornerRadius="2" BorderThickness="0,0,0,1" BorderBrush="{TemplateBinding BorderBrush}" >
+                            <Border.BitmapEffect>
+                                <DropShadowBitmapEffect Color="#30273239" Direction="270" ShadowDepth="1" Softness="0.2" Opacity="0.3"/>
+                            </Border.BitmapEffect>
+                        </Border>
+                        <Border x:Name="Border" CornerRadius="2" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Focus -->
+                        <Trigger Property="IsFocused" Value="true">
+                            <!--<Setter Property="Background" Value="#ffffff"/>-->
+                            <Setter Property="BorderBrush" Value="#2882bb"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="Padding" Value="7,0"/>
+                        </Trigger>
+                        <!-- Non Focus + MouseOver -->
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                        <GradientStop Color="#f2f7fc" Offset="0" />
+                                        <GradientStop Color="#d5dee8" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderBrush" Value="#c2c8cc"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Padding" Value="7,0"/>
+                        </Trigger>
+                        <!-- Focus + MouseOver -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsFocused, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Self}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Color="#f2f7fc" Offset="0" />
+                                            <GradientStop Color="#d5dee8" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderBrush" Value="#2882bb"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Padding" Value="7,0"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <!-- Focus + Press -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsFocused, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Color="#597fa5" Offset="0" />
+                                            <GradientStop Color="#507498" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="#ffffff"/>
+                                <Setter Property="BorderBrush" Value="#2882bb"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Padding" Value="7,0"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <!-- Non Focus + Press -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsFocused, RelativeSource={RelativeSource Self}}" Value="False" />
+                                <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Self}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Color="#597fa5" Offset="0" />
+                                            <GradientStop Color="#507498" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderBrush" Value="#476d93"/>
+                                <Setter Property="Foreground" Value="#ffffff"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <!--<Setter Property="Padding" Value="14,0"/>-->
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <!-- Non Focus + Disable -->
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                        <GradientStop Color="#fcfeff" Offset="0" />
+                                        <GradientStop Color="#e6e8eb" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderBrush" Value="#c2c8cc"/>
+                            <Setter Property="Foreground" Value="#bbbbbb"/>
+                        </Trigger>
+                        <!-- Focus + Disable -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="False" />
+                                <Condition Binding="{Binding Path=IsFocused, RelativeSource={RelativeSource Self}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Color="#fcfeff" Offset="0" />
+                                            <GradientStop Color="#e6e8eb" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderBrush" Value="#2882bb"/>
+                                <Setter Property="Foreground" Value="#bbbbbb"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Padding" Value="7,0"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

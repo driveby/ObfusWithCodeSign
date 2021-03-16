@@ -3,9 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ObfusWithSignTool"
         Title="CodeSign with Obfuscation © 2021 florist." Height="350" Width="600"
+        WindowStyle="None" ResizeMode="CanResize" Background="#335271"
         FontFamily="Malgun Gothic" FontSize="11"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
     
     <Window.Resources>
 
@@ -29,139 +33,195 @@
         </Style>
 
     </Window.Resources>
-    
-    <Grid Background="Transparent" Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="난독화" Command="{Binding ObfuscationCommand}" Width="50" HorizontalAlignment="Left">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding FileList.Count}" Value="0">
-                                <Setter Property="IsEnabled" Value="False"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Content="코드서명" Command="{Binding CodeSignCommand}" Width="55" Margin="10,0,0,0" Grid.Column="1">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding FileList.Count}" Value="0">
-                                <Setter Property="IsEnabled" Value="False"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Content="캐쉬삭제" Command="{Binding ClearCacheCommand}" Width="55" Margin="10,0,0,0" Grid.Column="2"/>
-            <Button Content="XML시간조정" Foreground="Red" Command="{Binding UpdateXmlTimeCommand}" Width="80" Grid.Column="4" HorizontalAlignment="Right"/>
-            <Button Content="버전제어" Command="{Binding AssemblyVersionControlCommand}" Width="55" Grid.Column="5" Margin="10,0,0,0"/>
 
-            <Image Name="imgSetting" Source="/ObfusWithSignTool;component/Resources/btn_setting_normal.png" Width="17" Height="17"
-                   MouseLeftButtonDown="imgSetting_MouseLeftButtonDown" Grid.Column="7"/>
-        </Grid>
-        
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <TextBlock Text="소스 폴더 : "/>
-            <TextBlock Text="{Binding RootFolder}" Margin="10,0,0,0"/>
-        </StackPanel>
+    <Grid x:Name="MainGrid">
+        <Border BorderBrush="#335271" BorderThickness="2" Background="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-        <DataGrid ItemsSource="{Binding FileList}" AutoGenerateColumns="False" CanUserAddRows="False"
-                  AllowDrop="True"
-                  local:FileDragDropHelper.IsFileDragDropEnabled="true"
-                  local:FileDragDropHelper.FileDragDropTarget="{Binding}"
-                  Background="Transparent" RowHeight="20"
-                  Grid.Row="4">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Button Content="x" Command="{Binding Path=DataContext.DeleteFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                <!-- 타이틀 -->
+                <Grid Name="TitleGrid" Background="#335271" MouseLeftButtonDown="TitleGrid_MouseLeftButtonDown">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="CodeSign with Obfuscation © 2021 florist." Foreground="White" FontFamily="Noto Sans CJK KR Regular" FontSize="11" HorizontalContentAlignment="Left" Margin="12,0,0,0" VerticalContentAlignment="Center" Padding="0"/>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="2">
+                        <!-- 최소화 -->
+                        <Button Background="Transparent" BorderThickness="0" Click="Minimized_click" VerticalAlignment="Top" Margin="0,0,5,0">
+                            <Image Stretch="None" Source="/ObfusWithSignTool;component/Resources/window-minimize.png" />
+                        </Button>
+                        <!-- 최대/복원 -->
+                        <Button Background="Transparent" BorderThickness="0" Click="WindowMaxSize_Click" VerticalAlignment="Top" Margin="0,0,5,0">
+                            <Image Name="MaxMinBtn" Stretch="None">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsWindowMaximized}" Value="false">
+                                                <Setter Property="Source" Value="/ObfusWithSignTool;component/Resources/window-full.png"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsWindowMaximized}" Value="True">
+                                                <Setter Property="Source" Value="/ObfusWithSignTool;component/Resources/window-zoom.png"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </Button>
+                        <!-- 종료 -->
+                        <Button Name="btnClose" Background="Transparent" BorderThickness="0" Click="btnClose_Click" VerticalAlignment="Top" Margin="0,0,10,0">
+                            <Image Stretch="None" Source="/ObfusWithSignTool;component/Resources/window-close.png" />
+                        </Button>
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- 컨텐츠 -->
+                <Grid Grid.Row="2" Background="#E4E7E9">
+
+                    <Grid Background="Transparent" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Content="난독화" Command="{Binding ObfuscationCommand}" Width="50" HorizontalAlignment="Left">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource OneClickCommonButtonStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FileList.Count}" Value="0">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Content="코드서명" Command="{Binding CodeSignCommand}" Width="60" Margin="10,0,0,0" Grid.Column="1">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource OneClickCommonButtonStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FileList.Count}" Value="0">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Content="캐쉬삭제" Command="{Binding ClearCacheCommand}" Width="60" Margin="10,0,0,0" Style="{StaticResource OneClickCommonButtonStyle}" Grid.Column="2"/>
+                            <Button Content="XML시간조정" Foreground="Red" Command="{Binding UpdateXmlTimeCommand}" Width="85" Grid.Column="4" HorizontalAlignment="Right" Style="{StaticResource OneClickCommonButtonStyle}"/>
+                            <Button Content="버전제어" Command="{Binding AssemblyVersionControlCommand}" Width="60" Style="{StaticResource OneClickCommonButtonStyle}" Grid.Column="5" Margin="10,0,0,0"/>
+
+                            <Image Name="imgSetting" Source="/ObfusWithSignTool;component/Resources/btn_setting_normal.png" Width="17" Height="17" 
+                                   MouseLeftButtonDown="imgSetting_MouseLeftButtonDown" Grid.Column="7"/>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="2">
+                            <TextBlock Text="소스 폴더 : "/>
+                            <TextBlock Text="{Binding RootFolder}" Margin="10,0,0,0"/>
+                        </StackPanel>
+
+                        <DataGrid ItemsSource="{Binding FileList}" AutoGenerateColumns="False" CanUserAddRows="False"
+                                  AllowDrop="True"
+                                  local:FileDragDropHelper.IsFileDragDropEnabled="true"
+                                  local:FileDragDropHelper.FileDragDropTarget="{Binding}"
+                                  Background="Transparent" RowHeight="20"
+                                  Grid.Row="4">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Button Content="x" Command="{Binding Path=DataContext.DeleteFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                         CommandParameter="{Binding}" Width="15"/>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="300" Header="파일명">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Margin="10,0,0,0">
-                                <TextBlock Text="{Binding FileName}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="확장자">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Extension}" HorizontalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="난독화 필요">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock HorizontalAlignment="Center">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsNeedObfuscation}" Value="True">
-                                                <Setter Property="Text" Value="예"/>
-                                                <Setter Property="Foreground" Value="Green"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="난독화 여부">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock HorizontalAlignment="Center">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsObfuscated}" Value="True">
-                                                <Setter Property="Text" Value="O"/>
-                                                <Setter Property="Foreground" Value="Green"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="서명" Width="40">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding CodeSignMessage}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CodeSignMessage}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="300" Header="파일명">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="10,0,0,0">
+                                                <TextBlock Text="{Binding FileName}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="확장자">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Extension}" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="난독화 필요">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsNeedObfuscation}" Value="True">
+                                                                <Setter Property="Text" Value="예"/>
+                                                                <Setter Property="Foreground" Value="Green"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="난독화 여부">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsObfuscated}" Value="True">
+                                                                <Setter Property="Text" Value="O"/>
+                                                                <Setter Property="Foreground" Value="Green"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="서명" Width="40">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding CodeSignMessage}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CodeSignMessage}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

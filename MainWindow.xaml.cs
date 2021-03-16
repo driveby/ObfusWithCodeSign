@@ -58,5 +58,42 @@ namespace ObfusWithSignTool
         {
             if (Context != null) Context.SettingCommand.Execute();
         }
+
+        private void TitleGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void Minimized_click(object sender, RoutedEventArgs e)
+        {
+            WindowState = System.Windows.WindowState.Minimized;
+        }
+
+        private void WindowMaxSize_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleMaximize();
+        }
+
+        /// <summary>
+        /// 최대창 - 복원 토글
+        /// </summary>
+        private void ToggleMaximize()
+        {
+            if (WindowState == System.Windows.WindowState.Maximized)
+            {
+                WindowState = System.Windows.WindowState.Normal;
+                if (Context != null) Context.IsWindowMaximized = false;
+            }
+            else
+            {
+                WindowState = System.Windows.WindowState.Maximized;
+                if (Context != null) Context.IsWindowMaximized = true;
+            }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
