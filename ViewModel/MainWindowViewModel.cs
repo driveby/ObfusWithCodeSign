@@ -20,8 +20,8 @@ namespace ObfusWithSignTool
         private readonly string RuleFilePath = System.IO.Directory.GetCurrentDirectory() + "\\Rule.xml";
         private readonly string BabelPath = @"C:\Program Files\Babel\babel.exe";
         private readonly string CodeSignTargetPath = @"C:\CodeSign";
-        private readonly string XConfigPath = @"D:\SplitBranch\Server\OneClick.Server\XConfig";
-        private readonly string XHibernatePath = @"D:\SplitBranch\Server\OneClick.Server\XHibernate";
+        private readonly string XConfigPath = "XConfig";
+        private readonly string XHibernatePath = "XHibernate";
 
         public void Loaded()
         {
@@ -350,10 +350,10 @@ namespace ObfusWithSignTool
 
         private void ExecuteUpdateXmlTime()
         {
-            //var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            //folderDialog.SelectedPath = System.IO.Directory.GetCurrentDirectory();
+            var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderDialog.SelectedPath = System.IO.Directory.GetCurrentDirectory();
 
-            //if (System.Windows.Forms.DialogResult.OK != folderDialog.ShowDialog()) return;
+            if (System.Windows.Forms.DialogResult.OK != folderDialog.ShowDialog()) return;
 
             if (MessageBoxResult.OK != MessageBox.Show("XConfig, XHibernate 폴더를 기준으로 *.xml 시간을 변경하시겠습니까?", "", MessageBoxButton.OKCancel)) return;
 
@@ -361,8 +361,8 @@ namespace ObfusWithSignTool
 
             List<FileInfo> hibernateMappingFiles = new List<FileInfo>();
 
-            DirectoryInfo xconfig = new DirectoryInfo(XConfigPath);
-            DirectoryInfo xhibernate = new DirectoryInfo(XHibernatePath);
+            DirectoryInfo xconfig = new DirectoryInfo(Path.Combine(folderDialog.SelectedPath, XConfigPath));
+            DirectoryInfo xhibernate = new DirectoryInfo(Path.Combine(folderDialog.SelectedPath, XHibernatePath));
 
             if (true == Directory.Exists(xconfig.FullName))
             {

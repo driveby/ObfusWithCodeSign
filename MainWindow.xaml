@@ -128,7 +128,8 @@
                                 </Button.Style>
                             </Button>
                             <Button Content="캐쉬삭제" Command="{Binding ClearCacheCommand}" Width="60" Margin="10,0,0,0" Style="{StaticResource OneClickCommonButtonStyle}" Grid.Column="2"/>
-                            <Button Content="XML시간조정" Foreground="Red" Command="{Binding UpdateXmlTimeCommand}" Width="85" Grid.Column="4" HorizontalAlignment="Right" Style="{StaticResource OneClickCommonButtonStyle}"/>
+                            <Button Content="XML시간조정" Foreground="Red" Command="{Binding UpdateXmlTimeCommand}" Width="85" Grid.Column="4" HorizontalAlignment="Right" Style="{StaticResource OneClickCommonButtonStyle}"
+                                    ToolTip="XConfig, XHibernate 폴더의 부모 폴더를 지정해 주세요."/>
                             <Button Content="버전제어" Command="{Binding AssemblyVersionControlCommand}" Width="60" Style="{StaticResource OneClickCommonButtonStyle}" Grid.Column="5" Margin="10,0,0,0"/>
 
                             <Image Name="imgSetting" Source="/ObfusWithSignTool;component/Resources/btn_setting_normal.png" Width="17" Height="17" 
